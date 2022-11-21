@@ -351,7 +351,7 @@ public class ListarContactos extends AppCompatActivity {
                             JSONArray contactoArray = jsonObject.getJSONArray( "contacto");
 
                             arrayUsuario.clear();//limpiar la lista de usuario antes de comenzar a buscar
-
+                            usuarioList.clear();
 //                            if ()){
 //                                Toast.makeText(getApplicationContext(), "No se encontro el valor", Toast.LENGTH_SHORT).show();
 //                            }
@@ -370,8 +370,9 @@ public class ListarContactos extends AppCompatActivity {
                                 arrayUsuario.add(usuario.getNombre()+' '+usuario.getTelefono());
                             }
 
-                            adp = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_checked, arrayUsuario);
-                            listUsuario.setAdapter(adp);
+                            adaptercustom = new CustomAdapter(usuarioList, getApplicationContext());
+                            // ArrayAdapter adp = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, autoLista);
+                            listUsuario.setAdapter(adaptercustom);
 
                         }catch (JSONException ex){
                             Toast.makeText(getApplicationContext(), "mensaje "+ex, Toast.LENGTH_SHORT).show();
@@ -397,6 +398,7 @@ public class ListarContactos extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Usuario eliminado exitosamente", Toast.LENGTH_SHORT).show();
                         listarUsuarios();
                         adaptercustom.update(usuarioList);
+                        buscar.setText("");
                     }
                 }, new Response.ErrorListener(){
             @Override
