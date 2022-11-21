@@ -85,7 +85,6 @@ public class ListarContactos extends AppCompatActivity {
         buscar = (EditText) findViewById(R.id.alctxtbuscar);
 
         listarUsuarios();
-        buscar.setFocusable(false);
 
         try{
             listUsuario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -302,6 +301,8 @@ public class ListarContactos extends AppCompatActivity {
                             JSONArray contactoArray = jsonObject.getJSONArray( "contactos");
 
                             arrayUsuario.clear();//limpiar la lista de usuario antes de comenzar a listar
+                            usuarioList.clear();
+                            contador = 0;
                             for (int i=0; i<contactoArray.length(); i++)
                             {
                                 JSONObject RowUsuario = contactoArray.getJSONObject(i);
@@ -321,6 +322,7 @@ public class ListarContactos extends AppCompatActivity {
 
                             // ArrayAdapter adp = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, autoLista);
                             listUsuario.setAdapter(adaptercustom);
+
                           //  adp = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_checked, arrayUsuario);
                           //  listUsuario.setAdapter(adp);
 
@@ -386,18 +388,20 @@ public class ListarContactos extends AppCompatActivity {
 
     private void eliminarUsuario(String dato) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://transportweb2.online/APIExamen/eliminarcontacto.php?id=";
+        String url = RestApiMethods.apiDeleteContact;
+        Log.i("LOG", url+dato);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url+dato,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(getApplicationContext(), "Usuario eliminado exitosamente", Toast.LENGTH_SHORT).show();
                         listarUsuarios();
+                        adaptercustom.update(usuarioList);
                     }
                 }, new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error){
-                //Toast.makeText(getApplicationContext(), "mensaje "+error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "mensaje "+error, Toast.LENGTH_SHORT).show();
             }
         });
         queue.add(stringRequest);

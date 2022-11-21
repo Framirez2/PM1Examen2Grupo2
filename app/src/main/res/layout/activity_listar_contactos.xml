@@ -33,8 +33,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Buscar por nombre"
-                android:inputType="textPersonName"
-                android:focusable="false" />
+                android:inputType="textPersonName" />
 
         </LinearLayout>
 
@@ -46,16 +45,14 @@
             <ListView
                 android:id="@+id/listaContacto"
                 android:layout_width="match_parent"
-                android:layout_height="574dp"
-                android:focusable="false"
-                android:focusableInTouchMode="true">
+                android:layout_height="574dp">
 
             </ListView>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="101dp"
+            android:layout_height="106dp"
             android:orientation="horizontal"
             android:paddingStart="10dp">
 
