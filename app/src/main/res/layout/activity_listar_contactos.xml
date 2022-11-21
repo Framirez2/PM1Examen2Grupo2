@@ -22,7 +22,7 @@
                 android:layout_width="2dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="#009688"
+                android:backgroundTint="#8BC34A"
                 android:text="Atras"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
@@ -46,7 +46,7 @@
             <ListView
                 android:id="@+id/listaContacto"
                 android:layout_width="match_parent"
-                android:layout_height="478dp"
+                android:layout_height="574dp"
                 android:focusable="false"
                 android:focusableInTouchMode="true">
 
@@ -55,34 +55,36 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:orientation="horizontal">
+            android:layout_height="101dp"
+            android:orientation="horizontal"
+            android:paddingStart="10dp">
 
             <Button
                 android:id="@+id/alcbtnEliminar"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:backgroundTint="#009688"
+                android:layout_marginRight="15dp"
+                android:backgroundTint="#8BC34A"
+                android:paddingRight="16dp"
                 android:text="Eliminar"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
             <Button
                 android:id="@+id/alcbtnActualizar"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:backgroundTint="#009688"
+                android:backgroundTint="#8BC34A"
                 android:text="Actualizar"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
             <Button
                 android:id="@+id/btnUbicacion"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:backgroundTint="#009688"
+                android:backgroundTint="#8BC34A"
                 android:text="Ubicacion"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
