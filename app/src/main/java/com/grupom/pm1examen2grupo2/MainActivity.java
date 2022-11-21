@@ -221,10 +221,10 @@ public class MainActivity extends AppCompatActivity {
             mostrarAlertaOK("Debe escribir un telefono" );
             //Toast.makeText(getApplicationContext(), "Debe de escribir un telefono" ,Toast.LENGTH_LONG).show();
         }else if (txtLat.getText().toString().equals("")){
-            mostrarAlertaOK("Debe escribir una latitud" );
+            mostrarAlertaOK("Verifique GPS para obtener la latitud" );
             //Toast.makeText(getApplicationContext(), "Debe de escribir una latitud" ,Toast.LENGTH_LONG).show();
         }else if (txtLon.getText().toString().equals("")){
-            mostrarAlertaOK("Debe escribir una longitud" );
+            mostrarAlertaOK("Verifique GPS para obtener la longitud" );
             //Toast.makeText(getApplicationContext(), "Debe de escribir un longitud" ,Toast.LENGTH_LONG).show();
         }else if(currentPhotoPath.length()<=0){
             mostrarAlertaOK("Debe agregar una fotografia" );

@@ -3,6 +3,8 @@ package com.grupom.pm1examen2grupo2;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -19,6 +21,7 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.telephony.SmsManager;
@@ -44,6 +47,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -66,6 +70,10 @@ public class ActualizarContactos extends AppCompatActivity {
     static final int TAKE_PIC_REQUEST = 101;
     public static String latitud = "";
     public static String longitud = "";
+
+    String currentPhotoPath = "";
+    static final int REQUESTCAMERA = 100;
+    static final int TAKEFOTO = 101;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -125,7 +133,122 @@ public class ActualizarContactos extends AppCompatActivity {
             }
         });
 
+        Foto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PermisosFoto();
+            }
+        });
 
+
+    }
+
+    private void PermisosFoto()
+    {
+        if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) !=
+                PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA} , REQUESTCAMERA);
+        }
+        else
+        {
+            tomarfoto();
+        }
+
+    }
+    private void tomarfoto()
+    {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.grupom.pm1examen2grupo2.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, TAKEFOTO);
+            }
+        }
+    }
+
+    /*@Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == TAKEFOTO && resultCode == RESULT_OK)
+        {
+            File foto = new File(currentPhotoPath);
+            Foto.setImageURI(Uri.fromFile(foto));
+        }
+    }*/
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        //File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+
+    public static String ImageToBase64(String filePath){
+        Bitmap bmp = null;
+        ByteArrayOutputStream bos = null;
+        byte[] bt = null;
+        String encodeString = "";
+        if (filePath.length()>0){
+            try
+            {
+                bmp = BitmapFactory.decodeFile(filePath);
+                bos = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.JPEG, 50, bos);
+                bt = bos.toByteArray();
+                encodeString = Base64.encodeToString(bt, Base64.DEFAULT);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return encodeString;
+    }
+
+    public static String ImageToBase64Byte(Bitmap img){
+        Bitmap bmp = null;
+        ByteArrayOutputStream bos = null;
+        byte[] bt = null;
+        String encodeString = "";
+            try
+            {
+                bmp = img;
+                bos = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.JPEG, 50, bos);
+                bt = bos.toByteArray();
+                encodeString = Base64.encodeToString(bt, Base64.DEFAULT);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+        return encodeString;
     }
 
     public void mostrarFoto(String Base64String) {
@@ -148,25 +271,10 @@ public class ActualizarContactos extends AppCompatActivity {
 
         Uri imageUri;
         //obtener la imagen por el almacenamiento interno
-        if(resultCode==RESULT_OK && requestCode==RESULT_GALLERY_IMG)
+        if(requestCode == TAKEFOTO && resultCode == RESULT_OK)
         {
-
-            imageUri = data.getData();
-            Foto.setImageURI(imageUri);
-            try {
-                imagen= MediaStore.Images.Media.getBitmap(this.getContentResolver(),imageUri);
-
-            }catch (Exception e)
-            {
-                Toast.makeText(getApplicationContext(),"Error al seleccionar imagen", Toast.LENGTH_SHORT).show();
-            }
-        }
-        //obtener la iamgen por la camara
-        if(requestCode == TAKE_PIC_REQUEST && resultCode == RESULT_OK)
-        {
-            Bundle extras = data.getExtras();
-            imagen = (Bitmap) extras.get("data");
-            Foto.setImageBitmap(imagen);
+            File foto = new File(currentPhotoPath);
+            Foto.setImageURI(Uri.fromFile(foto));
         }
 
     }
@@ -193,17 +301,9 @@ public class ActualizarContactos extends AppCompatActivity {
         return "";
     }
 
-    //--------------------------------metodo actualizar imagen-------------------------------------------------
     private void actualizarUsuario(String id) {
-        //String url = "https://transportweb2.online/APIExamen/listasinglecontacto.php?nombre=";
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         HashMap<String, String> parametros = new HashMap<>();
-        //obtiene la foto tomada o seleccionada, luego verifica en un if si la variable
-        // fotoString2 no este vacia ya que en caso que este vacia significa que no se actualiza la foto
-        /*String fotoString2 = GetStringImage(imagen);
-        if (fotoString2.equals("")||fotoString2.isEmpty()||fotoString2.equals(null)){
-            fotoString2 = fotoString;
-        }*/
 
         //setear los parametros mediante put
         parametros.put("id", id);
@@ -211,14 +311,18 @@ public class ActualizarContactos extends AppCompatActivity {
         parametros.put("telefono", txtTelefono.getText().toString());
         parametros.put("latitud", txtLat.getText().toString());
         parametros.put("longitud", txtLon.getText().toString());
-        parametros.put("imagen", String.valueOf(Sing()));
+        if (currentPhotoPath.length()>0){
+            parametros.put("imagen", ImageToBase64(currentPhotoPath));
+        }else{
+            parametros.put("imagen", ImageToBase64Byte(imgC));
+        }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, RestApiMethods.apiCreateContact,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, RestApiMethods.apiUpdateContact,
                 new JSONObject(parametros), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    Toast.makeText(getApplicationContext(), "String Response " + response.getString("mensaje").toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), response.getString("mensaje").toString(), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -228,10 +332,13 @@ public class ActualizarContactos extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.i("LOG", error.getMessage());
+                //Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(jsonObjectRequest);
+        Toast.makeText(getApplicationContext(), "Actualizado correctamente.", Toast.LENGTH_SHORT).show();
+
     }
 
 
