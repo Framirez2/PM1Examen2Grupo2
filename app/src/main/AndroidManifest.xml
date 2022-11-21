@@ -69,7 +69,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCaCgj84fV1j4uLD7kefOg63yNz-QZiaT0" />
+            android:value="AIzaSyBFES7kaPdaWadCHfowwPe1_25lyHNSq1Y" />
 
         <activity
             android:name=".ListarContactos"
