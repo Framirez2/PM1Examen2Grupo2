@@ -380,7 +380,7 @@ public class ListarContactos extends AppCompatActivity {
                 }, new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error){
-                //Toast.makeText(getApplicationContext(), "mensaje "+error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "No hay datos a mostrar", Toast.LENGTH_SHORT).show();
             }
         });
         queue.add(stringRequest);
