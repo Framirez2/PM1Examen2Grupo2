@@ -140,6 +140,13 @@ public class ActualizarContactos extends AppCompatActivity {
             }
         });
 
+        //Verificamos la nueva longitud y latitud
+        //valida si tiene los permisos de ser asi manda a llamar el metodo locationStart()
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+        } else {
+            locationStart();
+        }
 
     }
 
