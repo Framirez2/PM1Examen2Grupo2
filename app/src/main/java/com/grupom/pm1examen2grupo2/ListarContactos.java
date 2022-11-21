@@ -341,7 +341,6 @@ public class ListarContactos extends AppCompatActivity {
 
     private void BuscarUsuario(String dato) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        //String url = "https://transportweb2.online/APIExamen/listasinglecontacto.php?nombre=";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, RestApiMethods.apiFindContact+dato,
                 new Response.Listener<String>() {
                     @Override

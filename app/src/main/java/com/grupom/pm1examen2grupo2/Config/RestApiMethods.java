@@ -8,7 +8,7 @@ public class RestApiMethods {
 
     //Rests
     private static final String GetList = "/listaContactos.php";
-    private static final String FindContact = "/listasinglecontacto.php?nombre=";
+    private static final String FindContact = "/listacontactosingle.php?nombre=";
     private static final String UpdateContact = "/actualizarcontacto.php";
     private static final String CreateContact = "/crearContacto.php";
     private static final String DeleteContact = "/borrarContacto.php?id=";
