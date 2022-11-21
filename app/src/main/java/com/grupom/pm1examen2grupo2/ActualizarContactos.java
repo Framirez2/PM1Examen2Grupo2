@@ -147,7 +147,7 @@ public class ActualizarContactos extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         Uri imageUri;
-        //obtener la iamgen por el almacenamiento interno
+        //obtener la imagen por el almacenamiento interno
         if(resultCode==RESULT_OK && requestCode==RESULT_GALLERY_IMG)
         {
 
